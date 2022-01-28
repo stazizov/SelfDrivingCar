@@ -8,4 +8,4 @@ Out team consists 4 members:
   * Said Azizov(CV, ML),
   * Vadim Mazhitov (Unity, Level Creation),
   * Daniil Kikimov (Unity, C#, Level Creation),
-  * Dmitry Kutsenko (Conveer Preparation, ML)
+  * Dmitry Kutsenko(https://github.com/kdimon15) (Conveer Preparation, ML) 
