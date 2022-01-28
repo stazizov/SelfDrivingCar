@@ -5,7 +5,7 @@ In this track, our task was to build a system for delivering goods to a potentia
 Equipment involved in the delivery: a small car, quadrocopter, robotic arm.
 
 Out team consists 4 members:
-  * Said Azizov(CV, ML),
+  * Said Azizov(CV, Programming),
   * Vadim Mazhitov (Unity, Level Creation),
   * Daniil Kikimov (Unity, C#, Level Creation),
-  * Dmitry Kutsenko(https://github.com/kdimon15) (Conveer Preparation, ML) 
+  * <a href="https://github.com/kdimon15">Dmitry Kutsenko (Programming, CV)</a>
