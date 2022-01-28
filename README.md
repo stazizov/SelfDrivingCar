@@ -5,7 +5,7 @@ In this track, our task was to build a system for delivering goods to a potentia
 Equipment involved in the delivery: a small car, quadrocopter, robotic arm.
 
 Out team consists 4 members:
-  * <a href="https://github.com/proton-bit"> Said Azizov(CV, Programming) </a>,
-  * <a href="https://github.com/vadim-rm"> Vadim Mazhitov (Unity, Level Creation) </a>,
-  * Daniil Kikimov (Unity, C#, Level Creation),
+  * <a href="https://github.com/proton-bit"> Said Azizov(CV, Programming) </a>
+  * <a href="https://github.com/vadim-rm"> Vadim Mazhitov (Unity, Level Creation) </a>
+  * Daniil Kikimov (Unity, C#, Level Creation)
   * <a href="https://github.com/kdimon15">Dmitry Kutsenko (Programming, CV)</a>
