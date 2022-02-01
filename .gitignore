@@ -109,6 +109,12 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+<<<<<<< HEAD
+=======
+iterm/
+.DS_Store
+.DS_Store?
+>>>>>>> fd8b539 (stop-lines detection task comleted)
 
 # Spyder project settings
 .spyderproject
@@ -128,4 +134,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+<<<<<<< HEAD
+.DS_Store
+=======
+.DS_Store
+>>>>>>> fd8b539 (stop-lines detection task comleted)
 .DS_Store
