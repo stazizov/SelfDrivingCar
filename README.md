@@ -9,5 +9,5 @@ Code for simulation available in <a href = 'https://github.com/vadim-rm/NagibCar
 Out team consists 4 members:
   * <a href="https://github.com/vadim-rm"> Vadim Mazhitov (quadcopter's part, Simulation Creation) </a>
   * <a href="https://github.com/proton-bit"> Said Azizov(car's self-driving part) </a>
-  * <a href="https://github.com/katsushooter"> Vadim Mazhitov (quadcopter's part, Simulation Creation) </a>
+  * <a href="https://github.com/katsushooter"> Kikimov Daniil (Simulation Creation) </a>
   * <a href="https://github.com/kdimon15">Dmitry Kutsenko (Robotic Arm)</a>
