@@ -1,27 +1,18 @@
-import cv2
-from line_estimator.get_center import get_center
-from simple_pid import PID
+from car import Car
+from api.simulator import SimulatorAPI
+from cv.RoadDetector import RoadDetector
 
-error, rR, lR = 0, 9999999, 9999999
-pid = PID(80, 0, 3, setpoint=0)
-pid.output_limits = (-90, 90)
+sim_api = SimulatorAPI()
 
-MAX_SPEED = 20
+car = Car(
+    sim_api=sim_api,
+    road_detector=RoadDetector((1280 // 4, 720 // 4)),
+    PID=(80, 0, 5),
+    max_speed=20,
+    min_speed=5
+)
 
-def image_process(image, sim_api):
-    global error, rR, lR
-    angle = pid(error)
 
-    speed = MAX_SPEED
-    if min([rR, lR]) < 100:
-        speed = 1
-        
-    sim_api.go(speed, angle + 90)
-
-    image = cv2.resize(image, (1280 // 4, 720 // 4))
-    error, lR, rR, image = get_center(image)
-
-    image = cv2.resize(image, (1280, 720))
-    sim_api.imshow(image)
-
-    # print(min([rR, lR]))
+def image_process(image):
+    debug_image = car.follow_road(image)
+    sim_api.imshow(debug_image)
