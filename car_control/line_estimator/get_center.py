@@ -19,7 +19,6 @@ class FindLaneLines:
         img = self.transform.backward(img2)
 
         out_img = cv2.addWeighted(out_img, 1, img, 0.6, 0)
-        out_img = self.lanelines.plot(out_img)
         return img2, pos, lR, rR
             
 

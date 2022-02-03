@@ -2,13 +2,13 @@ import rospy
 import cv2
 import numpy as np
 from nagib_demo_msgs.msg import Camera
-from api.car import CarAPI
+from api.simulator import SimulatorAPI
 
 
 class CameraAPI:
     def __init__(self, image_handler):
         self.image_handler = image_handler
-        self.car = CarAPI()
+        self.car = SimulatorAPI()
 
     def startup(self):
         # rospy.init_node('image_listener', anonymous=True)
