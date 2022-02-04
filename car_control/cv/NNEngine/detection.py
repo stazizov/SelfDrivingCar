@@ -32,11 +32,14 @@ class Detector:
         YOLO model
         '''
 
+        # Detector Parameters
         self.whT = whT
         self.confThreshold = confThreshold
         self.nmsThreshold = nmsThreshold
         self.classnames = classnames
         self.net = self.define_net(model_cfg, model_weights)
+        # we define this list because coco consists 80 classes but we need only 3
+        self.desired_classes = ['traffic light', 'stop sign', 'person']
 
     def define_net(self, model_cfg, model_weights):
         '''
@@ -98,10 +101,10 @@ class Detector:
             current_coords = (x, y, x + w, y + h)
             current_class = self.classnames[classIds[i]]
             current_conf = confs[i]
-            img = self.draw_results(
-                img, current_coords, current_conf, current_class)
-            results.append([current_class, current_coords])
-
+            if current_class in self.desired_classes:
+                results.append([current_class, current_coords])
+                img = self.draw_results(
+                    img, current_coords, current_conf, current_class)
         return results, img
 
     def draw_results(self, img, bbox, conf, classname):
@@ -150,11 +153,3 @@ class Detector:
         outputs = self.net.forward(outputNames)
         bboxes, frame = self.find_objects(outputs=outputs, img=frame)
         return bboxes, frame
-
-
-if __name__ == '__main__':
-    image = cv2.imread(filename='test_image.png')
-    detector = Detector(CLASSNAMES, CONFIG_PATH, WEIGHTS_PATH)
-    bboxes, image = detector.forward(image)
-    cv2.imshow("Detection", image)
-    cv2.waitKey(0)
