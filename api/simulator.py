@@ -23,6 +23,7 @@ class SimulatorAPI:
         self.car_pub.publish(control)
 
     def imshow(self, image):
+        image = cv2.resize(image, (1280, 720))
         base64_image = base64.b64encode(cv2.imencode('.jpg', image)[1]).decode()
         self.display_pub.publish(base64_image)
 

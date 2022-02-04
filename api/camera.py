@@ -6,8 +6,9 @@ from api.simulator import SimulatorAPI
 
 
 class CameraAPI:
-    def __init__(self, image_handler):
+    def __init__(self, image_handler, sim_api):
         self.image_handler = image_handler
+        self.sim_api = sim_api
 
     def startup(self):
         # rospy.init_node('image_listener', anonymous=True)
@@ -22,4 +23,4 @@ class CameraAPI:
 
     def image_converter(self, image):
         img = self.data_uri_to_cv2_img(image.image)
-        self.image_handler(img)
+        self.image_handler(img, self.sim_api)

@@ -30,5 +30,5 @@ class RoadDetector:
         img = self.transform.backward(img2)
 
         out_img = cv2.addWeighted(out_img, 1, img, 0.6, 0)
-        return img, pos, (lR, rR)
+        return out_img, pos, (lR, rR)
             

@@ -15,16 +15,15 @@ class Car:
     '''
 
     def __init__(self,
-                 sim_api,
                  road_detector,
-                 PID,
+                 PID_settings,
                  max_speed,
                  min_speed
                  ):
         self.road_detector = road_detector
-        self.sim_api = sim_api
+        self.sim_api = None
 
-        self.PID = PID(**PID, setpoint=0)
+        self.PID = PID(*PID_settings, setpoint=0)
         self.PID.output_limits = (-90, 90)
 
         self.last_error = 0
@@ -40,6 +39,7 @@ class Car:
         if self.curveness is not None and min(self.curveness) < 100:
             speed = self.MIN_SPEED
 
+        print(speed, angle)
         self.sim_api.go(speed, angle)
 
         image = cv2.resize(image, self.road_detector.img_size)
