@@ -25,6 +25,7 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.pyc
 MANIFEST
 
 # PyInstaller
@@ -109,6 +110,18 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+iterm/
+.DS_Store
+.DS_Store?
+>>>>>>> fd8b539 (stop-lines detection task comleted)
+=======
+iterm/
+.DS_Store
+.DS_Store?
+>>>>>>> 2ba3785af604a88c6d722b22552fa0db116c376f
 
 # Spyder project settings
 .spyderproject
@@ -128,4 +141,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 .DS_Store
+=======
+.DS_Store
+>>>>>>> fd8b539 (stop-lines detection task comleted)
+.DS_Store
+=======
+.DS_Store
+>>>>>>> 2ba3785af604a88c6d722b22552fa0db116c376f

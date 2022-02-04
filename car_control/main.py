@@ -1,31 +1,18 @@
-#!/usr/bin/env python
+from car import Car
+from api.simulator import SimulatorAPI
+from cv.RoadDetector import RoadDetector
 
-import cv2
-from line_estimator.get_center import get_center
-from simple_pid import PID
-from datetime import datetime
+car = Car(
+    road_detector=RoadDetector((1280 // 4, 720 // 4)),
+    PID_settings=(80, 0, 5),
+    max_speed=20,
+    min_speed=5
+)
 
-IMAGE_PATH = "/catkin_ws/src/nagib_application/car_control/test.png"
 
-error, rR, lR = 0, 9999999, 9999999
-pid = PID(80, 0, 3, setpoint=0)
-pid.output_limits = (-90, 90)
+def image_process(image, sim_api):
+    if not car.sim_api:
+        car.sim_api = sim_api
 
-MAX_SPEED = 20
-init_t = datetime.now()
-
-def image_process(image, car):
-    global error, rR, lR
-    angle = pid(error)
-
-    speed = MAX_SPEED
-    if min([rR, lR]) < 100:
-        speed = 1
-        
-    car.go(speed, angle + 90)
-
-    image = cv2.resize(image, (1280 // 4, 720 // 4))
-    error, lR, rR, image = get_center(image)
-    cv2.imwrite(IMAGE_PATH, image)
-
-    print(min([rR, lR]))
+    debug_image = car.follow_road(image)
+    sim_api.imshow(debug_image)

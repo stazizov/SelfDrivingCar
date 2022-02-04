@@ -1,2 +1,2 @@
-from . import car
 from . import camera
+from . import simulator
