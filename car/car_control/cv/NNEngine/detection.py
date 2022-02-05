@@ -4,55 +4,60 @@ import random
 
 CONFIG_PATH = './yolov4-tiny.cfg'
 WEIGHTS_PATH = './yolov4-tiny.weights'
-CLASSNAMES = [item.strip() for item in open('./coco.names', 'r').readlines()]
+CLASSNAMES_PATH = './coco.names'
 
 
 class Detector:
     '''
-    YOLO detector trained on COCO dataset
-    '''
+    Description:
+        YOLO detector trained on COCO dataset
 
+    Arguments: 
+        classnames(list): array of names
+        model_cfg(str): path to model config file
+        model_weights(str): path to model weights
+
+    Returns:
+        YOLO model
+        '
+
+    '''
     def __init__(
         self,
-        classnames=CLASSNAMES,
+        classnames_path=CLASSNAMES_PATH,
         model_cfg=CONFIG_PATH,
         model_weights=WEIGHTS_PATH,
-        whT=416,
+        whT = 416,
         confThreshold=0.0,
-        nmsThreshold=0.0
+        nmsThreshold=0.0,
+        desired_classes = ['traffic light', 'stop sign', 'person']
     ):
-        '''
-        Arguments: 
-
-        classnames: list : array of names
-        model_cfg : str : path to model config file
-        model_weights : str : path to model weights
-
-        Returns:
-        YOLO model
-        '''
-
         # Detector Parameters
         self.whT = whT
         self.confThreshold = confThreshold
         self.nmsThreshold = nmsThreshold
-        self.classnames = classnames
+        self.classnames = [item.strip() for item in open(classnames_path, 'r').readlines()]
         self.net = self.define_net(model_cfg, model_weights)
         # we define this list because coco consists 80 classes but we need only 3
-        self.desired_classes = ['traffic light', 'stop sign', 'person']
+        self.desired_classes = desired_classes
+        self.colors = dict(
+            zip(
+                self.desired_classes, 
+                [[random.randint(0, 255) for _ in range(3)] for _ in self.desired_classes]
+                )
+            )
 
     def define_net(self, model_cfg, model_weights):
         '''
-        This function defines yolo detector
+        Description:
+            This function defines yolo detector
 
         Arguments:
-
-        model_cfg : str : path to model config file
-        model_weights : str : path to model weights
+            model_cfg(str): path to model config file
+            model_weights(str): path to model weights
 
         Returns:
-
-        YOLO model
+            YOLO model
         '''
 
         net = cv2.dnn.readNetFromDarknet(model_cfg, model_weights)
@@ -62,16 +67,15 @@ class Detector:
 
     def find_objects(self, img, outputs):
         '''
-        Applys NMS to yolo outputs
+        Description:
+            Applys NMS to yolo outputs
 
         Arguments: 
-
-        img : np.ndarray : input frame
-        outputs : list : YOLO outputs
+            img(np.ndarray) : input frame
+            outputs(list) : YOLO outputs
 
         Returns:
-
-        array of type [[classname, (x_min, y_min, x_max, y_max)]]
+            array of type [[classname, (x_min, y_min, x_max, y_max)]]
         '''
         hT, wT, cT = img.shape
         bbox = []
@@ -109,28 +113,27 @@ class Detector:
 
     def draw_results(self, img, bbox, conf, classname):
         '''
-        This function just draw bboxes on given image
+        Description:
+            This function just draw bboxes on given image
 
         Arguments: 
-
-        img : np.ndarray : input_image
-        bbox : np.ndarray : (x_min, y_min, x_max, y_max) coordinates
+            img(np.ndarray): input_image
+            bbox(np.ndarray): (x_min, y_min, x_max, y_max) coordinates
 
         Returns:
-
-        Image with rendered bboxes
+            Image with rendered bboxes
         '''
-        x, y, w, h = bbox
-        color = [random.randint(0, 255) for _ in range(3)]
+        x, y, w, h = [max(coord, 0) for coord in bbox]
+        color = self.colors[classname]
         img = cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
         img = cv2.putText(
             img,
             text=f'{classname} : {round(conf, 2)}%',
-            org=(x, y + h + 30),
+            org=(x, y+30),
             fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale=1,
+            fontScale=0.5,
             color=color,
-            lineType=cv2.LINE_4
+            lineType=1
         )
 
         return img
@@ -138,11 +141,11 @@ class Detector:
     def forward(self, frame):
         '''
         Arguments:
-        frame : np.ndarray : input image
+            frame(np.ndarray): input image
 
         Returns:
-        frame : np.ndarray : image with bboxes on it
-        bboxes : list : YOLO outputs of type [[classname, (x_min, y_min, x_max, y_max)]]
+            frame(np.ndarray): image with bboxes on it
+            bboxes(list): YOLO outputs of type [[classname, (x_min, y_min, x_max, y_max)]]
         '''
         blob = cv2.dnn.blobFromImage(
             frame, 1/255, (self.whT, self.whT), [0, 0, 0], 1, crop=False)
