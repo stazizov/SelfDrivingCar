@@ -2,6 +2,7 @@ from enum import Enum
 import cv2
 from .cv.RoadDetector import RoadDetector
 from simple_pid import PID
+import asyncio
 
 
 class TurnDirection(Enum):
@@ -15,12 +16,10 @@ class Car:
     '''
 
     def __init__(self,
-                 road_detector,
                  PID_settings,
                  max_speed,
                  min_speed
                  ):
-        self.road_detector = road_detector
         self.sim_api = None
 
         self.PID = PID(*PID_settings, setpoint=0)
@@ -32,7 +31,10 @@ class Car:
         self.MAX_SPEED = max_speed
         self.MIN_SPEED = min_speed
 
-    def follow_road(self, image):
+        self.RED_STOP_DISTANCE = 50
+        self.YELLOW_STOP_DISTANCE = 200
+
+    def follow_road(self, road_info):
         angle = self.PID(self.last_error)
         speed = self.MAX_SPEED
 
@@ -42,9 +44,11 @@ class Car:
         print(speed, angle)
         self.sim_api.go(speed, angle)
 
-        image = cv2.resize(image, self.road_detector.img_size)
-        image, self.last_error, self.curvenes = self.road_detector.forward(image)
-        return image
+        self.last_error = road_info.position
+        self.curveness = road_info.curveness
+
+    async def stop(self, delay=2):
+        await asyncio.sleep(delay)
 
     def turn(self, direction):
         self.last_error = 0
@@ -54,3 +58,10 @@ class Car:
             pass
         elif direction == TurnDirection.Right:
             pass
+
+    def decide(self, road_info):
+
+        if road_info.stop_distance is None:
+            self.follow_road(road_info)
+        elif road_info.stop_distance >= self.RED_STOP_DISTANCE:
+            self.stop()
