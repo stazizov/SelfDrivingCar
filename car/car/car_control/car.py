@@ -1,6 +1,6 @@
 from enum import Enum
 import cv2
-from cv.RoadDetector import RoadDetector
+from .cv.RoadDetector import RoadDetector
 from simple_pid import PID
 
 

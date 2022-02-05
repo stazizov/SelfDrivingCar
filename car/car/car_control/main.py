@@ -1,6 +1,6 @@
-from car import Car
-from api.simulator import SimulatorAPI
-from cv.RoadDetector import RoadDetector
+from .car import Car
+from ..api.simulator import SimulatorAPI
+from .cv.RoadDetector import RoadDetector
 
 car = Car(
     road_detector=RoadDetector((1280 // 4, 720 // 4)),

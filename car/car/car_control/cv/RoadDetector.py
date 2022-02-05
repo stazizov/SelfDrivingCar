@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
-from Thresholding import *
-from PerspectiveTransformation import *
-from LaneLines import *
+from .Thresholding import *
+from .PerspectiveTransformation import *
+from .LaneLines import *
 
 class RoadDetector:
     def __init__(self, img_size):
