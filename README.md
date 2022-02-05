@@ -4,7 +4,7 @@ This repository includes code (ROS2 module) from the National Technology Olympia
 In this track, our task was to build a system for delivering goods to a potential city. 
 Equipment involved in the delivery: a small car, quadrocopter, robotic arm.
 
-Unity code for the simulator available in [this](https://github.com/vadim-rm/NagibCarSimulator) repository.
+Unity code for the simulator available in [this](https://github.com/vadim-rm/NagibCarSimulator) repository. 
 Docker image for connecting to the simulation available [here](https://github.com/vadim-rm/CarSimDocker).
 
 Out team consists 4 members:
