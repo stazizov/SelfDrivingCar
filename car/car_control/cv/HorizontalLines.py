@@ -55,7 +55,6 @@ class HorizontalLines:
                     max_index = index
 
         distance = self.image_size[0] - max_index if max_index else None
-        print(f'distance: {distance}')
         return mask, distance
     
     def forward(self, image):
