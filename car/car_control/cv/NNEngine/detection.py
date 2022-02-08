@@ -4,7 +4,7 @@ import random
 
 CONFIG_PATH = './yolov4-tiny.cfg'
 WEIGHTS_PATH = './yolov4-tiny.weights'
-CLASSNAMES_PATH = './coco.names'
+CLASSNAMES_PATH = './obj.names'
 
 
 class Detector:
@@ -19,33 +19,35 @@ class Detector:
 
     Returns:
         YOLO model
-        '
 
     '''
+
     def __init__(
         self,
         classnames_path=CLASSNAMES_PATH,
         model_cfg=CONFIG_PATH,
         model_weights=WEIGHTS_PATH,
-        whT = 416,
-        confThreshold=0.0,
-        nmsThreshold=0.0,
-        desired_classes = ['traffic light', 'stop sign', 'person']
+        whT=416,
+        confThreshold=0.7,
+        nmsThreshold=0.7,
+        desired_classes=None
     ):
         # Detector Parameters
         self.whT = whT
         self.confThreshold = confThreshold
         self.nmsThreshold = nmsThreshold
-        self.classnames = [item.strip() for item in open(classnames_path, 'r').readlines()]
+        self.classnames = [item.strip()
+                           for item in open(classnames_path, 'r').readlines()]
         self.net = self.define_net(model_cfg, model_weights)
         # we define this list because coco consists 80 classes but we need only 3
-        self.desired_classes = desired_classes
+        self.desired_classes = desired_classes if desired_classes is not None else self.classnames
         self.colors = dict(
             zip(
-                self.desired_classes, 
-                [[random.randint(0, 255) for _ in range(3)] for _ in self.desired_classes]
-                )
+                self.desired_classes,
+                [[random.randint(0, 255) for _ in range(3)]
+                 for _ in self.desired_classes]
             )
+        )
 
     def define_net(self, model_cfg, model_weights):
         '''
@@ -77,7 +79,8 @@ class Detector:
         Returns:
             array of type [[classname, (x_min, y_min, x_max, y_max)]]
         '''
-        hT, wT, cT = img.shape
+
+        hT, wT, _ = img.shape
         bbox = []
         classIds = []
         confs = []
@@ -89,9 +92,14 @@ class Detector:
                 classId = np.argmax(scores)
                 confidence = scores[classId]
                 if confidence > self.confThreshold:
-                    w, h = int(detection[2]*wT), int(detection[3]*hT)
-                    x, y = int(detection[0] * wT - w /
-                               2), int(detection[1] * hT - h / 2)
+
+                    center_x = int(detection[0] * wT)
+                    center_y = int(detection[1] * hT)
+                    w = int(detection[2] * wT)
+                    h = int(detection[3] * hT)
+                    x = int(center_x - w / 2)
+                    y = int(center_y - h / 2)
+
                     bbox.append([x, y, w, h])
                     classIds.append(classId)
                     confs.append(float(confidence))
@@ -102,7 +110,7 @@ class Detector:
         for i in indices:
             box = bbox[i]
             x, y, w, h = box
-            current_coords = (x, y, x + w, y + h)
+            current_coords = (x, y, w, h)
             current_class = self.classnames[classIds[i]]
             current_conf = confs[i]
             if current_class in self.desired_classes:
@@ -124,17 +132,22 @@ class Detector:
             Image with rendered bboxes
         '''
         x, y, w, h = [max(coord, 0) for coord in bbox]
+        x1, y1, x2, y2 = x, y, x+w, y+h
         color = self.colors[classname]
-        img = cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
-        img = cv2.putText(
-            img,
-            text=f'{classname} : {round(conf, 2)}%',
-            org=(x, y+30),
-            fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale=0.5,
-            color=color,
-            lineType=1
-        )
+        label = f'{classname}: {round(conf, 2)}%'
+
+        # For bounding box
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+
+        # For the text background
+        # Finds space required by the text so that we can put a background with that amount of width.
+        (w, h), _ = cv2.getTextSize(
+            label, cv2.LINE_AA, 0.6, 2)
+
+        # Prints the text.
+        img = cv2.rectangle(img, (x1, y1 - 20), (x1 + w, y1), color, -1)
+        img = cv2.putText(img, label, (x1, y1 - 5),
+                          cv2.LINE_AA, 0.6, (255, 255, 255), 2)
 
         return img
 
@@ -156,3 +169,13 @@ class Detector:
         outputs = self.net.forward(outputNames)
         bboxes, frame = self.find_objects(outputs=outputs, img=frame)
         return bboxes, frame
+
+
+if __name__ == '__main__':
+    detector = Detector()
+    paths = ['./test_image.png', './test_image_2.png', './test_image_3.png']
+    for i, path in enumerate(paths):
+        img = cv2.imread(path)
+        bboxes, frame = detector.forward(img)
+        cv2.imshow(f'frame_{i}', frame)
+        cv2.waitKey(0)
