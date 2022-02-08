@@ -169,13 +169,3 @@ class Detector:
         outputs = self.net.forward(outputNames)
         bboxes, frame = self.find_objects(outputs=outputs, img=frame)
         return bboxes, frame
-
-
-if __name__ == '__main__':
-    detector = Detector()
-    paths = ['./test_image.png', './test_image_2.png', './test_image_3.png']
-    for i, path in enumerate(paths):
-        img = cv2.imread(path)
-        bboxes, frame = detector.forward(img)
-        cv2.imshow(f'frame_{i}', frame)
-        cv2.waitKey(0)
