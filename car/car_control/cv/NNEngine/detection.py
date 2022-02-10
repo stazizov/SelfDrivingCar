@@ -137,6 +137,7 @@ class Detector:
         Returns:
             Image with rendered bboxes
         '''
+        print(bbox)
         x, y, w, h = [max(coord, 0) for coord in bbox]
         x1, y1, x2, y2 = x, y, x+w, y+h
         color = self.colors[classname]
