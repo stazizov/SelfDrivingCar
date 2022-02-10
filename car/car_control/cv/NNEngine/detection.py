@@ -1,11 +1,17 @@
 import cv2
 import numpy as np
 import random
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
-CONFIG_PATH = './yolov4-tiny.cfg'
-WEIGHTS_PATH = './yolov4-tiny.weights'
-CLASSNAMES_PATH = './obj.names'
+CONFIG_PATH = os.path.join(dir_path, 'yolov4-tiny.cfg')
+WEIGHTS_PATH = os.path.join(dir_path, 'yolov4-tiny.weights')
+CLASSNAMES_PATH = os.path.join(dir_path, 'obj.names')
 
+class DetectedObject:
+    def __init__(self, name, coords):
+        self.name = name
+        self.coords = coords
 
 class Detector:
     '''
@@ -77,7 +83,7 @@ class Detector:
             outputs(list) : YOLO outputs
 
         Returns:
-            array of type [[classname, (x_min, y_min, x_max, y_max)]]
+            array of type DetectedObject
         '''
 
         hT, wT, _ = img.shape
@@ -114,7 +120,7 @@ class Detector:
             current_class = self.classnames[classIds[i]]
             current_conf = confs[i]
             if current_class in self.desired_classes:
-                results.append([current_class, current_coords])
+                results.append(DetectedObject(current_class, current_coords))
                 img = self.draw_results(
                     img, current_coords, current_conf, current_class)
         return results, img
@@ -158,7 +164,7 @@ class Detector:
 
         Returns:
             frame(np.ndarray): image with bboxes on it
-            bboxes(list): YOLO outputs of type [[classname, (x_min, y_min, x_max, y_max)]]
+            bboxes(list): YOLO outputs of type list[DetectedObject]
         '''
         blob = cv2.dnn.blobFromImage(
             frame, 1/255, (self.whT, self.whT), [0, 0, 0], 1, crop=False)

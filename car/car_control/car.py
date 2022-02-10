@@ -31,11 +31,11 @@ class Car:
 
         self.turn_start_steps = 0
 
-        self.TURN_RIGHT_STEPS = (10, 72, 77)
-        self.TURN_RIGHT_ANGLE = 34
+        self.TURN_RIGHT_STEPS = (80, 62, 20)
+        self.TURN_RIGHT_ANGLE = 45
 
-        self.TURN_LEFT_ANGLE = -34
-        self.TURN_LEFT_STEPS = (25, 100, 105)
+        self.TURN_LEFT_ANGLE = -45
+        self.TURN_LEFT_STEPS = (122, 62, 40)
 
         self.turning = False
 
@@ -67,7 +67,6 @@ class Car:
             self.last_error = 0
             self.curveness = None
             self.turn_start_time = datetime.now()
-            # TODO: Implement turn logic
 
             if direction == TurnDirection.Left:
                 self.turn_start_steps = self.left_encoder_value
@@ -84,10 +83,13 @@ class Car:
                 angle = self.TURN_LEFT_ANGLE
 
             if delta <= steps[0]:
+                print("FIRST", direction)
                 self.sim_api.go(10, 0)
-            elif delta <= steps[1]:
+            elif delta <= steps[1] + steps[0]:
+                print("SECOND", direction)
                 self.sim_api.go(10, angle)
-            elif delta <= steps[2]:
+            elif delta <= steps[2] + steps[1] + steps[0]:
+                print("THIRD", direction)
                 self.sim_api.go(10, 0)
             else:
                 self.turning = False
