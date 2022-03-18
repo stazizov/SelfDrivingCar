@@ -4,9 +4,9 @@ import random
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-CONFIG_PATH = os.path.join(dir_path, 'yolov4-tiny.cfg')
-WEIGHTS_PATH = os.path.join(dir_path, 'yolov4-tiny.weights')
-CLASSNAMES_PATH = os.path.join(dir_path, 'obj.names')
+CONFIG_PATH = '/home/dev_ws/src/car/car/car_control/cv/NNEngine/yolov4-tiny.cfg'
+WEIGHTS_PATH = '/home/dev_ws/src/car/car/car_control/cv/NNEngine/yolov4-tiny.weights'
+CLASSNAMES_PATH = '/home/dev_ws/src/car/car/car_control/cv/NNEngine/obj.names'
 
 class DetectedObject:
     def __init__(self, name, coords):
