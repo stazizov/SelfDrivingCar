@@ -9,6 +9,6 @@ Docker image for connecting to the simulation available [here](https://github.co
 
 Out team consists 4 members:
   * [Vadim Mazhitov](https://github.com/vadim-rm) (Quadcopter's part, Simulation Creation, Docker Setup)
-  * [Said Azizov](https://github.com/proton-bit) (Car's self-driving part) 
+  * [Said Azizov](https://github.com/proton-bit) (Car's self-driving part, NNs) 
   * [Kikimov Daniil](https://github.com/katsushooter) (Simulation Creation)
   * [Dmitry Kutsenko](https://github.com/kdimon15) (Robotic Arm)
